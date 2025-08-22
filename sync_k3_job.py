@@ -105,7 +105,7 @@ def k3_client() -> K3CloudApiSdk:
     return sdk
 
 
-def fetch_ids(con: pyodbc.Connection, top: int) -> List[int]:
+def fetch_ids(con: pyodbc.Connection) -> List[int]:
     with con.cursor() as cur:
         cur.execute(SQL_SEL_IDS)
         rows = cur.fetchall()
