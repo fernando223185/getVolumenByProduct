@@ -70,7 +70,6 @@ FORM_ID       = os.getenv("FORM_ID", "BD_MATERIAL")
 SQL_SEL_IDS = os.getenv("SQL_SEL_IDS", """
 SELECT TOP (?) id
 FROM dbo.starnet_products
-WHERE code = '000449'
 ORDER BY id
 """)
 
