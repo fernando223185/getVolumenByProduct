@@ -68,7 +68,7 @@ BATCH_SIZE    = int(os.getenv("BATCH_SIZE", "100"))
 FORM_ID       = os.getenv("FORM_ID", "BD_MATERIAL")
 
 SQL_SEL_IDS = os.getenv("SQL_SEL_IDS", """
-SELECT TOP (?) id
+SELECT id
 FROM dbo.starnet_products
 ORDER BY id
 """)
@@ -107,7 +107,7 @@ def k3_client() -> K3CloudApiSdk:
 
 def fetch_ids(con: pyodbc.Connection, top: int) -> List[int]:
     with con.cursor() as cur:
-        cur.execute(SQL_SEL_IDS, top)
+        cur.execute(SQL_SEL_IDS)
         rows = cur.fetchall()
         return [int(r[0]) for r in rows]
 
@@ -156,7 +156,7 @@ def process_batch() -> int:
     ok, fail = 0, 0
 
     with sql_connect() as con:
-        ids = fetch_ids(con, BATCH_SIZE)
+        ids = fetch_ids(con)
         if not ids:
             print("[INFO] No hay IDs para procesar en starnet_products")
             return 0
