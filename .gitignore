@@ -1,0 +1,58 @@
+﻿# Bytecode / cache
+__pycache__/
+*.py[cod]
+*$py.class
+# Virtual envs
+.venv/
+venv/
+env/
+ENV/
+pip-wheel-metadata/
+# Logs
+logs/
+*.log
+# Config y secretos
+.env
+.env.*
+conf.ini
+*.ini
+*.key
+*.pem
+*.pfx
+*.crt
+*.cert
+*.secret
+secrets.*
+*.password
+# Distribución / build
+build/
+dist/
+.eggs/
+*.egg-info/
+*.whl
+# Tests / coverage / herramientas
+.tox/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.pyre/
+.ruff_cache/
+.cache/
+# Editores / IDE
+.vscode/
+.idea/
+*.code-workspace
+# SO
+.DS_Store
+Thumbs.db
+desktop.ini
+# Jupyter
+.ipynb_checkpoints/
+# Miscelánea
+*.bak
+*.tmp
+*.swp
+*.swo
+~$*
