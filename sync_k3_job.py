@@ -1,30 +1,30 @@
-"""
-K3 → starnet_products.volume sync (Python)
------------------------------------------
-Tarea programada en Windows que:
-1) Lee IDs desde SQL Server (tabla dbo.starnet_products)
-2) Llama al SDK Python de Kingdee (View) por cada Id
-3) Actualiza el campo 'volume' en dbo.starnet_products
 
-Requisitos:
-- Python 3.10/3.11/3.13
-- pyodbc, python-dotenv
-- Microsoft ODBC Driver 17/18 for SQL Server
-- SDK Kingdee (.whl) instalado (kingdee.cdp.webapi.sdk-*.whl)
+# K3 → starnet_products.volume sync (Python)
+# -----------------------------------------
+# Tarea programada en Windows que:
+# 1) Lee IDs desde SQL Server (tabla dbo.starnet_products)
+# 2) Llama al SDK Python de Kingdee (View) por cada Id
+# 3) Actualiza el campo 'volume' en dbo.starnet_products
 
-# crear y activar venv (si aún no lo tienes)
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+# Requisitos:
+# - Python 3.10/3.11/3.13
+# - pyodbc, python-dotenv
+# - Microsoft ODBC Driver 17/18 for SQL Server
+# - SDK Kingdee (.whl) instalado (kingdee.cdp.webapi.sdk-*.whl)
 
-# instalar dependencias
-pip install python-dotenv pyodbc
+# # crear y activar venv (si aún no lo tienes)
+# python -m venv .venv
+# .\.venv\Scripts\Activate.ps1
 
-# instalar el SDK Kingdee desde tu .whl
-pip install "C:\Users\PCX\kingdee-sdk\SDK_Python3.0_V8.2.0\SDK_Python3.0_V8.2.0\python_sdk_v8.2.0\kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl"
+# # instalar dependencias
+# pip install python-dotenv pyodbc
 
-Ejecución manual:
-> python sync_k3_job.py
-"""
+# # instalar el SDK Kingdee desde tu .whl
+# pip install "C:\Users\PCX\kingdee-sdk\SDK_Python3.0_V8.2.0\SDK_Python3.0_V8.2.0\python_sdk_v8.2.0\kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl"
+
+# Ejecución manual:
+# > python sync_k3_job.py
+
 
 from __future__ import annotations
 import json
