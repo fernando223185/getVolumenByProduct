@@ -1,4 +1,3 @@
-
 # K3 → starnet_products.volume sync (Python)
 # -----------------------------------------
 # Tarea programada en Windows que:
@@ -133,7 +132,6 @@ def extract_box_volume(parsed: dict) -> Optional[float]:
         if val is None:
             return None
 
-        # Normaliza a float
         if isinstance(val, (int, float)):
             return float(val)
         if isinstance(val, str):
@@ -142,14 +140,37 @@ def extract_box_volume(parsed: dict) -> Optional[float]:
     except Exception:
         return None
 
-def update_product_volume(con: pyodbc.Connection, product_id: int, volume: Optional[float]) -> None:
+def extract_F_price_effect_num(parsed: dict) -> Optional[int]:
+    """
+    Extrae F_price_effect_num desde el JSON de View.
+    En tu respuesta real, viene en: parsed["Result"]["Result"]["F_price_effect_num"]
+    Retorna un entero.
+    """
+    try:
+        inner = parsed.get("Result", {}).get("Result", {})
+        if not isinstance(inner, dict):
+            return None
+        
+        val = inner.get("F_price_effect_num", None)
+        if val is None:
+            return None
+
+        if isinstance(val, (int, float)):
+            return int(val)
+        if isinstance(val, str):
+            return int(float(val.replace(",", ".")))
+        return None
+    except Exception:
+        return None
+
+def update_product_volume(con: pyodbc.Connection, product_id: int, volume: Optional[float], pzsxbox: int) -> None:
     with con.cursor() as cur:
         cur.execute(
-            "UPDATE dbo.starnet_products SET volume = ? WHERE id = ?",
-            (volume, product_id)
+            "UPDATE dbo.starnet_products SET volume = ?, piezacaja = ? WHERE id = ?",
+            (volume, pzsxbox,product_id)
         )
 
-# =============== Proceso principal ==============
+# =============== Main Proccess ==============
 
 def process_batch() -> int:
     sdk = k3_client()
@@ -165,7 +186,7 @@ def process_batch() -> int:
             try:
                 payload = build_view_payload(pid)
                 req_json = json.dumps(payload, ensure_ascii=False)
-                resp = sdk.View(FORM_ID, req_json)  # string JSON
+                resp = sdk.View(FORM_ID, req_json) 
                 parsed = json.loads(resp)
 
                 status = parsed.get("Result", {}).get("ResponseStatus", {})
@@ -182,8 +203,9 @@ def process_batch() -> int:
                     continue
 
                 volume = extract_box_volume(parsed)
-                update_product_volume(con, pid, volume)
-                print(f"[OK] id={pid} volume={volume!r}")
+                pzsxbox = extract_F_price_effect_num(parsed)
+                update_product_volume(con, pid, volume, pzsxbox)
+                print(f"[OK] id={pid} volume={volume!r} pzsxbox={pzsxbox!r}")
                 ok += 1
 
             except Exception as ex:
