@@ -57,7 +57,7 @@ K3_APPID      = os.getenv("K3_APPID",      "")
 K3_APPSEC     = os.getenv("K3_APPSEC",     "")
 K3_LCID       = int(os.getenv("K3_LCID",   "2052"))
 K3_ORGNUM     = os.getenv("K3_ORGNUM",     "100")
-K3_CREATE_ORG = int(os.getenv("K3_CREATE_ORG", "0"))  # si necesitas enviar CreateOrgId en el body
+K3_CREATE_ORG = int(os.getenv("K3_CREATE_ORG", "0")) 
 K3_CONFIG_PATH = os.getenv("K3_CONFIG_PATH", "").strip()
 K3_CONFIG_NODE = os.getenv("K3_CONFIG_NODE", "config").strip()
 
