@@ -163,11 +163,33 @@ def extract_F_price_effect_num(parsed: dict) -> Optional[int]:
     except Exception:
         return None
 
-def update_product_volume(con: pyodbc.Connection, product_id: int, volume: Optional[float], pzsxbox: int) -> None:
+def extract_F_TQOY_Price_9s2(parsed: dict) -> Optional[float]:
+    """
+    Extrae F_TQOY_Price_9s2 desde el JSON de View.
+    En tu respuesta real, viene en: parsed["Result"]["Result"]["F_TQOY_Price_9s2"]F_TQOY_Price_9s2
+    """
+    try:
+        inner = parsed.get("Result", {}).get("Result", {})
+        if not isinstance(inner, dict):
+            return None
+
+        val = inner.get("F_TQOY_Price_9s2", None)
+        if val is None:
+            return None
+
+        if isinstance(val, (int, float)):
+            return float(val)
+        if isinstance(val, str):
+            return float(val.replace(",", "."))
+        return None
+    except Exception:
+        return None
+
+def update_product_volume(con: pyodbc.Connection, product_id: int, volume: Optional[float], pzsxbox: int, p6a_CAJA: Optional[float]) -> None:
     with con.cursor() as cur:
         cur.execute(
-            "UPDATE dbo.starnet_products SET volume = ?, piezacaja = ? WHERE id = ?",
-            (volume, pzsxbox,product_id)
+            "UPDATE dbo.starnet_products SET volume = ?, piezacaja = ?, p6a_CAJA = ? WHERE id = ?",
+            (volume, pzsxbox, p6a_CAJA, product_id)
         )
 
 # =============== Main Proccess ==============
@@ -204,7 +226,8 @@ def process_batch() -> int:
 
                 volume = extract_box_volume(parsed)
                 pzsxbox = extract_F_price_effect_num(parsed)
-                update_product_volume(con, pid, volume, pzsxbox)
+                F_TQOY_Price_9s2 = extract_F_TQOY_Price_9s2(parsed)
+                update_product_volume(con, pid, volume, pzsxbox, F_TQOY_Price_9s2)
                 print(f"[OK] id={pid} volume={volume!r} pzsxbox={pzsxbox!r}")
                 ok += 1
 
